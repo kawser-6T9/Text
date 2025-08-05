@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Available TTS Voices</title>
+</head>
+<body>
+  <h3>✅ আপনার ডিভাইসে ইনস্টলকৃত ভয়েস সমূহ:</h3>
+  <ul id="voices"></ul>
+
+  <script>
+    funct<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📖 ভাষাভিত্তিক টেক্সট-টু-স্পিচ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #333;
+    }
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 150px;
+      font-size: 18px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    select, button {
+      font-size: 18px;
+      padding: 10px 15px;
+      margin: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 16px;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔊 টেক্সট টু স্পিচ (ভাষা অনুযায়ী)</h2>
+
+  <textarea id="text">
+عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ قَالَ قَالَ رَسُوْلُ اللَّهِ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ الْإِيْمَانُ بِضْعٌ وَسَبْعُوْنَ شُعْبَةً...
+  </textarea>
+  <br>
+
+  <label for="language">🌐 ভাষা নির্বাচন করুন:</label>
+  <select id="language">
+    <option value="ar-SA">Arabic (العربية)</option>
+    <option value="bn-BD">Bengali (বাংলা)</option>
+    <option value="en-US" selected>English (English)</option>
+    <option value="ur-PK">Urdu (اردو)</option>
+    <option value="hi-IN">Hindi (हिन्दी)</option>
+  </select>
+
+  <br>
+
+  <button onclick="speakText()">🔊 পড়া শুরু করো</button>
+  <div id="status"></div>
+
+  <script>
+    let allVoices = [];
+
+    function loadVoices() {
+      allVoices = speechSynthesis.getVoices();
+    }
+
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    function speakText() {
+      const text = document.getElementById('text').value.trim();
+      const lang = document.getElementById('language').value;
+      const status = document.getElementById('status');
+
+      if (!text) {
+        status.innerText = "⚠️ অনুগ্রহ করে কিছু টেক্সট লিখুন!";
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+
+      const matchedVoice = allVoices.find(v => v.lang === lang);
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+        status.innerText = ""; // Clear status
+      } else {
+        status.innerText = "❌ এই ভাষার জন্য আপনার ডিভাইসে কোনো voice পাওয়া যায়নি। Settings > Text-to-Speech এ গিয়ে ইনস্টল করুন।";
+        return;
+      }
+
+      speechSynthesis.cancel(); // পুরাতন বন্ধ করে
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+
+</body>
+</html>
